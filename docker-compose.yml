@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    gpus: all
+    network_mode: host
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    restart: unless-stopped
+
+  openhands:
+    image: docker.all-hands.dev/all-hands-ai/openhands:0.26
+    container_name: openhands
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ollama
+    environment:
+      SANDBOX_RUNTIME_CONTAINER_IMAGE: "docker.all-hands.dev/all-hands-ai/runtime:0.26-nikolaik"
+      LOG_ALL_EVENTS: "true"
+      LLM_API_KEY: "ollama"
+      LLM_BASE_URL: http://host.docker.internal:11434
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.openhands-state:/.openhands-state
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stdin_open: true
+    tty: true
+    pull_policy: always
+    restart: unless-stopped
+    
+  init-ollama:
+    image: curlimages/curl:latest
+    container_name: init-ollama
+    network_mode: host  
+    depends_on:
+      - ollama
+    volumes:
+      - ./scripts:/scripts
+      - ./config:/config
+    entrypoint: ["/bin/sh", "-c", "sleep 15 && /scripts/init-ollama.sh"]
+    restart: "no"
+  
+  volumes:
+    ollama;
