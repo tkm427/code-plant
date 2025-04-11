@@ -1,10 +1,19 @@
 #!/bin/bash
+#!/bin/bash
 set -e
+
+# Ollamaコンテナ名で接続
+OLLAMA_API="http://ollama:11434"
 
 # OllamaサーバーがAPIリクエストを受け付けるまで待機
 echo "Waiting for Ollama service to be ready..."
-while ! curl -s http://ollama:11434/api/tags >/dev/null; do
-  sleep 2
+max_retries=30
+retry_count=0
+
+while ! curl -s $OLLAMA_API/api/tags > /dev/null && [ $retry_count -lt $max_retries ]; do
+  echo "Attempt $((retry_count+1))/$max_retries: Ollama service not ready yet, waiting..."
+  sleep 5
+  retry_count=$((retry_count+1))
 done
 
 # 設定ファイルからモデルリストを読み込む

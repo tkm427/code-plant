@@ -4,8 +4,13 @@ services:
   ollama:
     image: ollama/ollama
     container_name: ollama
-    gpus: all
-    network_mode: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     ports:
       - "11434:11434"
     volumes:
@@ -16,7 +21,7 @@ services:
     image: docker.all-hands.dev/all-hands-ai/openhands:0.26
     container_name: openhands
     ports:
-      - "8000:8000"
+      - "3000:3000"
     depends_on:
       - ollama
     environment:
@@ -46,5 +51,5 @@ services:
     entrypoint: ["/bin/sh", "-c", "sleep 15 && /scripts/init-ollama.sh"]
     restart: "no"
   
-  volumes:
-    ollama;
+volumes:
+  ollama:
