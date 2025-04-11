@@ -1,2 +1,5 @@
 # モデルデータ
 ollama-data/
+
+#ignore macos system files
+.DS_Store
