@@ -30,7 +30,7 @@ mistral
 phi3
 ```
 > [!CAUTION]
-> 現在自動でモデルをダウンロードできていません。なので以下を実行
+> 現在自動でモデルをダウンロードできていません。なのでdocker-compose起動後に以下を実行
 
 ```bash
 docker-compose exec ollama bash
@@ -47,7 +47,6 @@ docker-compose up -d
 ### 4. 接続
 
 - OpenHandsインターフェース: `http://[サーバーのIPアドレス]:3000`
-- Ollama API: `http://[サーバーのIPアドレス]:11434`
 
 ## ファイル構成
 
