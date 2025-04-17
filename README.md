@@ -50,6 +50,7 @@ docker-compose up -d
 
 ### 5. OpenHandsの設定
 <img width="1125" alt="Image" src="https://github.com/user-attachments/assets/7e855357-2041-42d8-be99-f86e9a55b4e9" />
+
 ## ファイル構成
 
 - `docker-compose.yml`: Docker Compose設定ファイル
